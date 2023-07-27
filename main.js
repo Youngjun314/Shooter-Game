@@ -41,11 +41,9 @@ let keysDown = {}
 function setupKeyboardListener() {
     document.addEventListener("keydown", function(event) {
         keysDown[event.keyCode] = true
-        console.log("누른 키", event.key, event.keyCode)
     })
     document.addEventListener("keyup", function(event) {
         delete keysDown[event.keyCode]
-        console.log("뗀 키", event.key, event.keyCode)
     })
 }
 
