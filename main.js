@@ -9,7 +9,7 @@ canvas.height = 700
 
 document.body.appendChild(canvas)
 
-let backgroundImage, playerImage, bulletImage, enemyImage, gameOverImage, criticalBulletImage
+let backgroundImage, bulletImage, criticalBulletImage,emptyHeartImage, enemyImage, fullHeartImage, gameOverImage, halfHeartImage, playerImage
 let player_x = canvas.width/2 - 32
 let player_y = canvas.height - 64
 
@@ -18,7 +18,9 @@ function generateRandomValue(min, max) {
     return randomNumber
 }
 
-let gameOver = false
+let gameOver = 0
+
+let lives = 3
 
 let critical_chance = 0.2
 
@@ -26,7 +28,7 @@ let critical_modify = 2
 
 let movement_speed = 5
 
-let bullet_speed = 15
+let bullet_speed = 13
 
 let enemy_speed = 5
 
@@ -87,8 +89,7 @@ function Critical_Bullet() {
     this.checkHit = function() {
         for(let i = 0; i < enemyList.length; i++) {
             if(
-                this.y <= enemyList[i].y && 
-                this.y >= enemyList[i].y - 50 && 
+                this.y <= enemyList[i].y &&  
                 this.x >= enemyList[i].x - 40 * critical_modify &&
                 this.x <= enemyList[i].x + 40 * critical_modify  
             ) {
@@ -100,12 +101,25 @@ function Critical_Bullet() {
 }
 
 function createBullet() {
-    if(generateRandomValue(1, 10) <= critical_chance * 10) {
+    if(generateRandomValue(1, 100) <= critical_chance * 100) {
         let c = new Critical_Bullet()
         c.init()
     } else {
         let b = new Bullet()
         b.init()
+    }
+ }
+
+ function bulletClear() {
+    for(let i = 0; i < bulletList.length; i++) {
+        if(!bulletList[i].alive || bulletList[i].y < -35) {
+            bulletList.splice(i, 1)
+        }
+    }
+    for(let i = 0; i < criticalBulletList.length; i++) {
+        if(!criticalBulletList[i].alive || criticalBulletList[i].y < -35) {
+            criticalBulletList.splice(i, 1)
+        }
     }
  }
 
@@ -120,8 +134,9 @@ function createBullet() {
 
     this.update = function() {
         this.y += enemy_speed
-        if(this.y > canvas.height - 65) {
-            gameOver = true
+        if(this.y == canvas.height - 65) {
+            gameOver += 1
+            console.log(gameOver)
         }
     }
  }
@@ -133,25 +148,59 @@ function createBullet() {
     }, enemy_spawn_speed)
  }
 
+ function enemyClear() {
+    for(let i = 0; i < enemyList.length; i++) {
+        if(enemyList[i].y > canvas.height) {
+            enemyList.splice(i, 1)
+        }
+    }
+}
+
 function loadImage() {
     backgroundImage = new Image()
     backgroundImage.src = "images/Background.jpg"
-    playerImage = new Image()
-    playerImage.src = "images/Player.png"
     bulletImage = new Image()
     bulletImage.src = "images/Bullet.png"
-    enemyImage = new Image()
-    enemyImage.src = "images/Enemy.png"
-    gameOverImage = new Image()
-    gameOverImage.src = "images/GameOver.png"
     criticalBulletImage = new Image()
     criticalBulletImage.src = "images/Critical_Bullet.png"
-
+    emptyHeartImage = new Image()
+    emptyHeartImage.src = "images/Empty_Heart.png"
+    enemyImage = new Image()
+    enemyImage.src = "images/Enemy.png"
+    fullHeartImage = new Image()
+    fullHeartImage.src = "images/Full_Heart.png"
+    gameOverImage = new Image()
+    gameOverImage.src = "images/GameOver.png"
+    halfHeartImage = new Image()
+    halfHeartImage.src = "images/Half_Heart.png"
+    playerImage = new Image()
+    playerImage.src = "images/Player.png"
 }
 
 function render() {
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height)
     ctx.drawImage(playerImage, player_x, player_y)
+
+    if(gameOver == 0) {
+        ctx.drawImage(fullHeartImage, canvas.width - 60, 20, 35, 35)
+        ctx.drawImage(fullHeartImage, canvas.width - 100, 20, 35, 35)
+        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    }
+    else if(gameOver == 1) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
+        ctx.drawImage(fullHeartImage, canvas.width - 100, 20, 35, 35)
+        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    }
+    else if(gameOver == 2) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
+        ctx.drawImage(emptyHeartImage, canvas.width - 100, 20, 35, 35)
+        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    }
+    else {
+        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
+        ctx.drawImage(emptyHeartImage, canvas.width - 100, 20, 35, 35)
+        ctx.drawImage(emptyHeartImage, canvas.width - 140, 20, 35, 35)
+    }
 
     ctx.fillText(`Score : ${score}`, 20, 20)
     ctx.fillStyle = "red"
@@ -173,7 +222,7 @@ function render() {
 }
 
 function main() {
-    if(gameOver == false) {
+    if(gameOver < lives) {
         update()
         render()
         requestAnimationFrame(main)
@@ -232,6 +281,9 @@ function update() {
     for(let i = 0; i < enemyList.length; i++) {
         enemyList[i].update()
     }
+
+    bulletClear()
+    enemyClear()
 }
 
 loadImage()
