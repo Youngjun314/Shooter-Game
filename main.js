@@ -26,11 +26,11 @@ let critical_modify = 2
 
 let movement_speed = 5
 
-let bullet_speed = 10
+let bullet_speed = 15
 
-let enemy_speed = 3
+let enemy_speed = 5
 
-let enemy_spawn_speed = 1000
+let enemy_spawn_speed = 700
 
 let score = 0
 
@@ -100,7 +100,7 @@ function Critical_Bullet() {
 }
 
 function createBullet() {
-    if(generateRandomValue(1, 10) >= 8) {
+    if(generateRandomValue(1, 10) <= critical_chance * 10) {
         let c = new Critical_Bullet()
         c.init()
     } else {
