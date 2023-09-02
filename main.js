@@ -4,7 +4,7 @@ let ctx
 canvas = document.createElement("canvas")
 ctx = canvas.getContext("2d")
 
-canvas.width = 400
+canvas.width = 500
 canvas.height = 700
 
 document.body.appendChild(canvas)
@@ -18,9 +18,9 @@ function generateRandomValue(min, max) {
     return randomNumber
 }
 
-let gameOver = 0
+let maxHealth = 3
 
-let lives = 3
+let health = 3
 
 let critical_chance = 0.2
 
@@ -135,8 +135,7 @@ function createBullet() {
     this.update = function() {
         this.y += enemy_speed
         if(this.y == canvas.height - 65) {
-            gameOver += 1
-            console.log(gameOver)
+            health -= 1
         }
     }
  }
@@ -181,30 +180,88 @@ function render() {
     ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height)
     ctx.drawImage(playerImage, player_x, player_y)
 
-    if(gameOver == 0) {
-        ctx.drawImage(fullHeartImage, canvas.width - 60, 20, 35, 35)
-        ctx.drawImage(fullHeartImage, canvas.width - 100, 20, 35, 35)
-        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    if(health/maxHealth >= 0.95) {
+        ctx.drawImage(fullHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
     }
-    else if(gameOver == 1) {
-        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
-        ctx.drawImage(fullHeartImage, canvas.width - 100, 20, 35, 35)
-        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    else if(health/maxHealth >= 0.85) {
+        ctx.drawImage(halfHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
     }
-    else if(gameOver == 2) {
-        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
-        ctx.drawImage(emptyHeartImage, canvas.width - 100, 20, 35, 35)
-        ctx.drawImage(fullHeartImage, canvas.width - 140, 20, 35, 35)
+    else if(health/maxHealth >= 0.75) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.65) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(halfHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.55) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.45) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(halfHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.35) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.25) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(halfHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth >= 0.15) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(fullHeartImage, canvas.width - 195, 35, 30, 30)
+    }
+    else if(health/maxHealth > 0) {
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(halfHeartImage, canvas.width - 195, 35, 30, 30)
     }
     else {
-        ctx.drawImage(emptyHeartImage, canvas.width - 60, 20, 35, 35)
-        ctx.drawImage(emptyHeartImage, canvas.width - 100, 20, 35, 35)
-        ctx.drawImage(emptyHeartImage, canvas.width - 140, 20, 35, 35)
+        ctx.drawImage(emptyHeartImage, canvas.width - 55, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 90, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 125, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 160, 35, 30, 30)
+        ctx.drawImage(emptyHeartImage, canvas.width - 195, 35, 30, 30)
     }
 
-    ctx.fillText(`Score : ${score}`, 20, 20)
-    ctx.fillStyle = "red"
-    ctx.font = "20px Arial"
+    ctx.fillText(`Score : ${score}`, 20, 40)
+    ctx.fillText(`${health} / ${maxHealth}`, 370, 25)
+    ctx.fillStyle = "white"
+    ctx.font = "20px Arial" 
 
     for(let i = 0; i < bulletList.length; i++) {
         if(bulletList[i].alive == true) {
@@ -222,12 +279,12 @@ function render() {
 }
 
 function main() {
-    if(gameOver < lives) {
+    if(health > 0) {
         update()
         render()
         requestAnimationFrame(main)
     } else {
-        ctx.drawImage(gameOverImage, 0, 200, 400, 235)
+        ctx.drawImage(gameOverImage, 0, canvas.height/4, canvas.width, canvas.width * 0.6)
     }
     
 }
